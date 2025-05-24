@@ -8,17 +8,36 @@ import ExpenseRoute from './routes/expense.route.js';            //import the ex
 
 dotenv.config({});                                               //to use the .env file
 const app = express();                                           //initialize the express app
-const PORT = 5000;                                               //port number
+const PORT = process.env.PORT || 5000;                          //port number
 
 //middlewares
 app.use(express.json());                                         //to parse the json data from the frontend request
 app.use(express.urlencoded({ extended: true }));                 //to parse the form data from the frontend request
 app.use(cookieParser());                                         //to parse the cookies
+
+// Allow both local and deployed frontend origins
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://backend-expense-tracker-1-jwaw.onrender.com", // <-- replace with your deployed frontend URL
+];
 const corsOptions = {
-    origin: "http://localhost:5173",                             //frontend url
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 };
-app.use(cors(corsOptions));                                      //to enable cross-origin requests
+app.use(cors(corsOptions));
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+});
 
 // api's
 app.use('/api/v3/user', UserRoute);                              //user routes like- http://localhost:8000/api/v3/user/register
