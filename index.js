@@ -18,7 +18,8 @@ app.use(cookieParser());                                         //to parse the 
 // Allow both local and deployed frontend origins
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://frontend-expense-tracker-qjco-prakshal-jain-s-projects.vercel.app" // <-- NO trailing slash!
+    "https://frontend-expense-tracker-qjco-prakshal-jain-s-projects.vercel.app",
+    "https://frontend-expense-tracker-qjco-git-main-prakshal-jain-s-projects.vercel.app" // <-- add this, no trailing slash
 ];
 const corsOptions = {
     origin: function (origin, callback) {
