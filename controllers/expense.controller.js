@@ -33,47 +33,42 @@ export const addExpense = async (req, res) => {
 
 
 export const getAllExpenses = async (req, res) => {
+
     try {
-        // Always get the userId from the authenticated user (e.g., req.user.userId or req.id)
-        const userId = req.id; // current logged in user id (should be set by your auth middleware)
-        let category = req.query.category || "";
-        const done = req.query.done || "";
-
-        // Only fetch expenses for the logged-in user
-        const query = { userId };
-
-        if (category.toLowerCase() === "all") {
-            // no need to filter the expenses by category
+        const userId = req.id; //current logged in user id
+        let category = req.query.category || "" //get the category from the query parameter
+        const done = req.query.done || "" //get the done from the query parameter
+        
+        const query = { userId };                           //query to find the expenses of the user or filter the expenses by category or done
+        if (category.toLowerCase() === "all") {             
+        //no need to filter the expenses by category
         } else if (category) {
-            query.category = { $regex: category, $options: 'i' };
+            query.category = { $regex: category,$options:'i'}; //filter the expenses by category
         }
-
+        
         if (done.toLowerCase() === "done") {
-            query.done = true;
-        } else if (done.toLowerCase() === "undone") {
-            query.done = false;
-        }
+            query.done = true;   //filter the expenses by done
+        }  else if (done.toLowerCase() === "undone") {
+            query.done = false;  //filter the expenses by undone
+        };
 
         const expenses = await Expense.find(query);
-        if (!expenses || expenses.length === 0) {
+        if(!expenses || expenses.length === 0) { //if no expenses found
             return res.status(404).json({
-                msg: "No expenses found.",
-                success: false
+                msg: "No expenses found.", //return the error message
+                success: false //no expenses found
             });
-        }
+        };
 
         return res.status(200).json({
-            expenses,
-            success: true
+            expenses, //return the expenses
+            success: true //expenses found
         });
-
+       
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            msg: "Server error.",
-            success: false
-        });
     }
+
 }
 
 
