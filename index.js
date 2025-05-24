@@ -18,7 +18,7 @@ app.use(cookieParser());                                         //to parse the 
 // Allow both local and deployed frontend origins
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://backend-expense-tracker-1-jwaw.onrender.com", // <-- replace with your deployed frontend URL
+    "https://frontend-expense-tracker-byi5.vercel.app/", // <-- add your deployed frontend URL here
 ];
 const corsOptions = {
     origin: function (origin, callback) {
